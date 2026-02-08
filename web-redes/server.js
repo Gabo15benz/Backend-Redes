@@ -20,7 +20,7 @@ const pool = new Pool({
 });
 
 // comprobar conexión
-app.get("/test-db", async (req, res) => {
+app.get("/", async (req, res) => {
     try {
         const result = await pool.query("SELECT NOW()");
         res.json(result.rows[0]);
@@ -52,5 +52,6 @@ app.post("/registro", async (req, res) => {
 // iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Servidor activo en http://localhost:${PORT}`);
+    console.log(`Servidor activo en:${PORT}`);
 });
+
