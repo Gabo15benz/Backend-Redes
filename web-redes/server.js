@@ -1,3 +1,5 @@
+
+
 import express from "express";
 import pkg from "pg";
 import cors from "cors";
@@ -9,7 +11,6 @@ const app = express();
 // middlewares
 app.use(cors());
 app.use(express.json());
-app.use(express.static(".")); // sirve index.html y carpetas
 
 // conexión a Neon
 const pool = new Pool({
@@ -23,7 +24,10 @@ const pool = new Pool({
 app.get("/", async (req, res) => {
     try {
         const result = await pool.query("SELECT NOW()");
-        res.json(result.rows[0]);
+        res.json({
+            status: "ok",
+            time: result.rows[0]
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
