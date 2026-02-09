@@ -59,3 +59,34 @@ app.listen(PORT, () => {
     console.log(`Servidor activo en:${PORT}`);
 });
 
+// login
+app.post("/login", async (req, res) => {
+    const { correo, password } = req.body;
+
+    try {
+        const result = await pool.query(
+            "SELECT * FROM usuarios WHERE correo = $1 AND password = $2",
+            [correo, password]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(401).json({
+                ok: false,
+                error: "Credenciales incorrectas"
+            });
+        }
+
+        res.json({
+            ok: true,
+            usuario: {
+                id: result.rows[0].id,
+                nombre: result.rows[0].nombre,
+                correo: result.rows[0].correo
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
